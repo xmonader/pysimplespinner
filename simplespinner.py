@@ -1,6 +1,5 @@
 import time
 import threading
-from threading import Timer, Thread
 from itertools import cycle
 
 class Spinner:
