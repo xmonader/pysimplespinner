@@ -1,5 +1,6 @@
 import time
 import threading
+from threading import Timer, Thread
 from itertools import cycle
 
 class Spinner:
@@ -10,20 +11,24 @@ class Spinner:
         
     def start(self):
         while not self.shouldstop:
-            print(next(self.c)+"\b", end='')
+            time.sleep(0.07)
+            print("\r"+next(self.c), end='')
                         
     def stop(self):
         self.shouldstop=True
+        print("\r")
+        
+    def __enter__(self):
+        threading._start_new_thread(self.start, ())
+        
+    def __exit__(self, *args):
+        self.stop()
+
+         
 
 
 if __name__ == "__main__":
-     def heavycomp():
-         sp=Spinner()
-         threading._start_new_thread(sp.start, ())
-         print("please wait...")
-         time.sleep(5)
-         sp.stop()
-         print("we are done")
-    
-
-    
+    with Spinner():
+        print("Long computation")
+        time.sleep(5)
+    print("Done")
